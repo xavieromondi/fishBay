@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { db, authentication } from "../firebase";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 import "url-search-params-polyfill";
 
@@ -29,6 +29,9 @@ const UserInfoScreen = ({ navigation }) => {
   }, []);
 
   const handleSave = async () => {
+    // Get the current user's UID
+    const uid = authentication.currentUser.uid;
+
     // Create a new user object
     const user = {
       name,
@@ -40,7 +43,7 @@ const UserInfoScreen = ({ navigation }) => {
 
     try {
       // Add the new user to the "users" collection in Firestore
-      await addDoc(collection(db, "users"), user);
+      await setDoc(doc(db, "users", uid), user);
 
       // Clear the form
       setName("");

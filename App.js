@@ -9,6 +9,8 @@ import DetailsScreen from "./screens/DetailsScreen";
 import CartScreen from "./screens/CartScreen";
 import UserInfoScreen from "./screens/UserInfoScreen";
 import MapScreen from "./screens/MapScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,8 @@ const App = () => {
     <CartProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="SingUp" component={SignUpScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="User" component={UserInfoScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />

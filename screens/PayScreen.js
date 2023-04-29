@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 
 import mpesaLogo from "../assets/safaricom-mpesa.jpg";
@@ -14,6 +15,7 @@ import mpesaLogo from "../assets/safaricom-mpesa.jpg";
 export default function PayScreen({ navigation, route }) {
   const [number, setNumber] = useState("0797211187");
   const [amount, setAmount] = useState(route.params.totalAmount);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNumberChange = (text) => {
     setNumber(text);
@@ -24,6 +26,8 @@ export default function PayScreen({ navigation, route }) {
   };
 
   const handlePayNowPress = () => {
+    setIsLoading(true);
+
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,9 +44,13 @@ export default function PayScreen({ navigation, route }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        navigation.navigate("Map"); // navigate to "Map" screen
+        setIsLoading(false);
+        navigation.navigate("Map");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -68,7 +76,11 @@ export default function PayScreen({ navigation, route }) {
         />
       </View>
       <TouchableOpacity style={styles.payButton} onPress={handlePayNowPress}>
-        <Text style={styles.payButtonText}>Pay Now</Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.payButtonText}>Pay Now</Text>
+        )}
       </TouchableOpacity>
 
       <StatusBar style="auto" />

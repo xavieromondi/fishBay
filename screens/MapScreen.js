@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { db } from "../firebase";
 import { authentication } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
+import { getDistance } from "geolib";
+import React, { useState, useEffect } from "react";
 
 const MapScreen = () => {
   const [userLocation, setUserLocation] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [deliveryTime, setDeliveryTime] = useState(null);
 
   useEffect(() => {
     // Retrieve the user's location data from Firestore
@@ -19,6 +22,26 @@ const MapScreen = () => {
 
     return () => unsubscribe();
   }, []);
+
+  // Calculate the distance between the user and the restaurant
+  useEffect(() => {
+    if (userLocation) {
+      const userCoords = {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      };
+      const restaurantCoords = {
+        latitude: -1.30675,
+        longitude: 36.80155,
+      };
+      const distance = getDistance(userCoords, restaurantCoords);
+      setDistance(distance);
+
+      // Calculate the delivery time assuming an average speed of 30 km/h for the motorcycle delivery
+      const deliveryTime = distance / 1000 / 30; // Convert distance from meters to kilometers and divide by speed in km/h
+      setDeliveryTime(deliveryTime);
+    }
+  }, [userLocation]);
 
   return (
     <View style={styles.container}>
@@ -54,6 +77,19 @@ const MapScreen = () => {
           />
         </MapView>
       )}
+
+      {distance && (
+        <View style={styles.distanceContainer}>
+          <Text style={styles.distanceText}>
+            Distance to restaurant: {distance} meters
+          </Text>
+          {deliveryTime && (
+            <Text style={styles.deliveryTimeText}>
+              Estimated delivery time : {deliveryTime.toFixed(1)} hours
+            </Text>
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -65,6 +101,18 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  distanceContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+  },
+  distanceText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

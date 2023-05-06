@@ -1,9 +1,10 @@
 {
   "expo": {
     "name": "fishBay",
-    "slug": "fishBay",
+    "slug": "fishbay",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "demo",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -11,11 +12,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.company.fishbayRider",
+      "googleServicesFile": "./google-services (3).json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -26,9 +31,27 @@
         }
       }
     },
-
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-  }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "08ae3810-27bc-40f6-a34f-32ecd02afae7"
+      }
+    },
+    "owner": "myasma01"
+  },
+  "plugins": [
+    [
+      "expo-notifications",
+      {
+        "icon": "-",
+        "color": "#ffffff",
+        "sounds": [
+          "-",
+          "-"
+        ]
+      }
+    ]
+  ]
 }

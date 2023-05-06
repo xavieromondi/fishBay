@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { CartProvider } from "./CartContext";
 import { NavigationContainer } from "@react-navigation/native";

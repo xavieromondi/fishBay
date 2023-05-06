@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import * as Location from "expo-location";
-
 import { db, authentication } from "../firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
-
+import * as Notifications from "expo-notifications";
 import "url-search-params-polyfill";
 
 const UserInfoScreen = ({ navigation }) => {
@@ -13,22 +12,47 @@ const UserInfoScreen = ({ navigation }) => {
   const [address, setAddress] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [locationRetrieved, setLocationRetrieved] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         alert("Permission to access location was denied");
         return;
       }
-
-      let location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync({});
       setLatitude(location.coords.latitude);
       setLongitude(location.coords.longitude);
-    })();
+      setLocationRetrieved(true);
+    };
+
+    getLocation();
+
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        // Get the data from the notification
+        const data = notification.request.content.data;
+
+        // Update the state with the new latitude and longitude values
+        setLatitude(data.latitude);
+        setLongitude(data.longitude);
+        setLocationRetrieved(true);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const handleSave = async () => {
+    if (!locationRetrieved) {
+      // Location data has not been retrieved yet
+      alert("Please wait for the location to be retrieved before saving.");
+      return;
+    }
+
     // Get the current user's UID
     const uid = authentication.currentUser.uid;
 
@@ -44,6 +68,18 @@ const UserInfoScreen = ({ navigation }) => {
     try {
       // Add the new user to the "users" collection in Firestore
       await setDoc(doc(db, "users", uid), user);
+
+      // Request permission to send push notifications
+      const settings = await Notifications.getPermissionsAsync();
+      if (settings.granted) {
+        await Notifications.setNotificationChannelAsync("default", {
+          name: "Default",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+        });
+      } else {
+        alert("You need to enable notifications to use this feature.");
+      }
 
       // Clear the form
       setName("");
@@ -79,7 +115,6 @@ const UserInfoScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

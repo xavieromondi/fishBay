@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "207041813487",
+    "project_id": "fishbay-385114",
+    "storage_bucket": "fishbay-385114.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207041813487:android:bf8b00d40009cc5ea6f41a",
+        "android_client_info": {
+          "package_name": "com.company.fishbayRider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207041813487-3r75cddm63tm0frltps941h07kphaom7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYWf33sW9WPkTaiBBSnjirSX4cNilsKKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207041813487-3r75cddm63tm0frltps941h07kphaom7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

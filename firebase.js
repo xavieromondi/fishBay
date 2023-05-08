@@ -3,13 +3,14 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBMpZe_PKhErZ-jQcpDqG2Z9MqI4H64Qk0",
-  authDomain: "fishbay-d034d.firebaseapp.com",
-  projectId: "fishbay-d034d",
-  storageBucket: "fishbay-d034d.appspot.com",
-  messagingSenderId: "539124641007",
-  appId: "1:539124641007:web:1195f5407728f836d2ff1a",
-  measurementId: "G-RSM0X6N028",
+  apiKey: "AIzaSyDgrcx7K2I9tYs7r7Ukg15GrBkQ6nlnsao",
+  authDomain: "fishbay-385114.firebaseapp.com",
+  databaseURL: "https://fishbay-385114-default-rtdb.firebaseio.com",
+  projectId: "fishbay-385114",
+  storageBucket: "fishbay-385114.appspot.com",
+  messagingSenderId: "207041813487",
+  appId: "1:207041813487:web:da06fd712d6307c7a6f41a",
+  measurementId: "G-YQR6G3GPBY",
 };
 
 const app = initializeApp(firebaseConfig);
